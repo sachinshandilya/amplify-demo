@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 // import reportWebVitals from "./reportWebVitals";
 import Amplify, { Auth } from "aws-amplify";
 import awsExports from "./aws-exports";
 
+let App;
 Amplify.configure(awsExports);
+
+App = require("./App.js").default;
 
 Amplify.configure({
   API: {

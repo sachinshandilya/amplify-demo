@@ -29,6 +29,8 @@ export default function PersonTable(props) {
   const [refreshRows, setRefreshRows] = React.useState(false);
   console.log("PersonTable");
 
+  console.log(user.attributes["custom:organisation_id"]);
+
   React.useEffect(() => {
     console.log("user ", user);
     const getDetails = async () => {
@@ -36,8 +38,9 @@ export default function PersonTable(props) {
       console.log("*****Call****");
       const result = await API.graphql(
         graphqlOperation(listEmployees, {
-          email: user?.attributes["email"],
-          limit: 100,
+          filter: {
+            organisation_id: { eq: user.attributes["custom:organisation_id"] },
+          },
         })
       );
       console.log("result ", result);

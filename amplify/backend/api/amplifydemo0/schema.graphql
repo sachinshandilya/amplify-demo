@@ -2,6 +2,11 @@ type Employee
   @model
   @versioned
   @key(fields: ["id"])
+  @key(
+    name: "byOrganisation"
+    fields: ["organisation_id"]
+    queryField: "employeeByOrganisation"
+  )
   @auth(
     rules: [
       {
@@ -9,12 +14,7 @@ type Employee
         ownerField: "organisation_id"
         identityClaim: "custom:organisation_id"
       }
-      { allow: public, operations: [read] }
-      {
-        allow: owner
-        ownerField: "organisation_id"
-        identityClaim: "custom:organisation_id"
-      }
+      { allow: private, provider: iam }
     ]
   ) {
   id: ID!
@@ -37,7 +37,6 @@ type Organisation
         ownerField: "id"
         identityClaim: "custom:organisation_id"
       }
-      { allow: public, operations: [read] }
       { allow: private, provider: iam }
     ]
   ) {

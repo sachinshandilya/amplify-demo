@@ -62,6 +62,44 @@ export const listEmployees = /* GraphQL */ `
     }
   }
 `;
+export const employeeByOrganisation = /* GraphQL */ `
+  query EmployeeByOrganisation(
+    $organisation_id: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelEmployeeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    employeeByOrganisation(
+      organisation_id: $organisation_id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        email
+        age
+        salary
+        organisation_id
+        createdAt
+        updatedAt
+        version
+        organisation {
+          id
+          name
+          address
+          createdAt
+          updatedAt
+          version
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrganisation = /* GraphQL */ `
   query GetOrganisation($id: ID!) {
     getOrganisation(id: $id) {
