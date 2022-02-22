@@ -4,10 +4,7 @@ import ReactDOM from "react-dom";
 import Amplify, { Auth } from "aws-amplify";
 import awsExports from "./aws-exports";
 
-let App;
 Amplify.configure(awsExports);
-
-App = require("./App.js").default;
 
 Amplify.configure({
   API: {
@@ -23,6 +20,7 @@ Amplify.configure({
   },
 });
 
+let App = require("./App.js").default;
 ReactDOM.render(
   <React.StrictMode>
     <App />

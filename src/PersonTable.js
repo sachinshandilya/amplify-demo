@@ -7,10 +7,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { listEmployees } from "./graphql/queries";
+import { employeeByOrganisation } from "./graphql/queries";
 import { onCreatePerson } from "./graphql/subscriptions";
-
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import client from "./graphqlClient";
+const gql = require("graphql-tag");
 
 const useStyles = makeStyles({
   table: {
@@ -36,16 +36,22 @@ export default function PersonTable(props) {
     const getDetails = async () => {
       if (!user) return;
       console.log("*****Call****");
-      const result = await API.graphql(
-        graphqlOperation(listEmployees, {
-          filter: {
-            organisation_id: { eq: user.attributes["custom:organisation_id"] },
-          },
-        })
-      );
+      const result = await client.query({
+        query: gql.gql(employeeByOrganisation),
+        variables: {
+          organisation_id: user.attributes["custom:organisation_id"],
+        },
+      });
+      // const result = await API.graphql(
+      //   graphqlOperation(listEmployees, {
+      //     filter: {
+      //       organisation_id: { eq: user.attributes["custom:organisation_id"] },
+      //     },
+      //   })
+      // );
       console.log("result ", result);
 
-      setRows(result.listEmployees.items);
+      setRows(result.data.employeeByOrganisation.items);
     };
     getDetails();
   }, [user, refreshRows]);

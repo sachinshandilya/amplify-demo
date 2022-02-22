@@ -1,6 +1,4 @@
 import React from "react";
-import awsExports from "./aws-exports";
-import Amplify from "aws-amplify";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 import LoginPage from "./Login.js";
 import { AmplifySignOut } from "@aws-amplify/ui-react";
@@ -8,8 +6,6 @@ import { Menu, MenuItem, IconButton } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PersonTable from "./PersonTable.js";
 // import AddPerson from "./AddPerson.js";
-
-Amplify.configure(awsExports);
 
 const App = ({ match }) => {
   const [authState, setAuthState] = React.useState();
@@ -44,7 +40,7 @@ const App = ({ match }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem>{user?.attributes["email"]}</MenuItem>
+      <MenuItem>{user?.attributes?.email}</MenuItem>
       <AmplifySignOut
         style={{
           "--amplify-primary-color": "transparent",
@@ -56,8 +52,8 @@ const App = ({ match }) => {
     </Menu>
   );
 
-  console.log(authState);
-  console.log(user);
+  console.log("authState", authState);
+  console.log("user", user);
 
   return (
     <div style={{ display: "flex" }}>
