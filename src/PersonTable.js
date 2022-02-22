@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { employeeByOrganisation } from "./graphql/queries";
-import { onCreatePerson } from "./graphql/subscriptions";
+import { onCreateEmployee } from "./graphql/subscriptions";
 import client from "./graphqlClient";
 const gql = require("graphql-tag");
 
@@ -31,51 +31,52 @@ export default function PersonTable(props) {
 
   console.log(user.attributes["custom:organisation_id"]);
 
+  const getDetails = async () => {
+    if (!user) return;
+    console.log("*****Call****");
+    const result = await client.query({
+      query: gql.gql(employeeByOrganisation),
+      variables: {
+        organisation_id: user.attributes["custom:organisation_id"],
+      },
+      fetchPolicy: "network-only",
+    });
+    console.log("result ", result);
+
+    setRows(result.data.employeeByOrganisation.items);
+  };
+
   React.useEffect(() => {
     console.log("user ", user);
-    const getDetails = async () => {
-      if (!user) return;
-      console.log("*****Call****");
-      const result = await client.query({
-        query: gql.gql(employeeByOrganisation),
-        variables: {
-          organisation_id: user.attributes["custom:organisation_id"],
-        },
-      });
-      // const result = await API.graphql(
-      //   graphqlOperation(listEmployees, {
-      //     filter: {
-      //       organisation_id: { eq: user.attributes["custom:organisation_id"] },
-      //     },
-      //   })
-      // );
-      console.log("result ", result);
-
-      setRows(result.data.employeeByOrganisation.items);
-    };
     getDetails();
   }, [user, refreshRows]);
 
-  //   React.useEffect(() => {
-  //     const subscribe = () => {
-  //       if (user) {
-  //         const subscription = API.graphql({
-  //           query: onCreatePerson,
-  //           variables: {
-  //             organisation_id: organisation.id,
-  //           },
-  //         }).subscribe({
-  //           next: ({ provider, value }) => {
-  //             setRefreshRows(Math.random());
-  //             //enable this while demoing subscriptions
-  //             alert("Data has been updated");
-  //           },
-  //         });
-  //         return () => subscription.unsubscribe();
-  //       }
-  //     };
-  //     subscribe();
-  //   }, [user]);
+  React.useEffect(() => {
+    const subscribe = async () => {
+      if (!user) {
+        return;
+      }
+      const obs = client
+        .subscribe({
+          query: gql.gql(onCreateEmployee),
+          variables: {
+            organisation_id: user.attributes["custom:organisation_id"],
+          },
+          fetchPolicy: "network-only",
+        })
+        .subscribe({
+          next: () => {
+            alert("Got subscription update");
+            setRefreshRows(Math.random());
+          },
+          error: () => {
+            console.log("In error", arguments);
+          },
+        });
+      return () => obs.unsubscribe();
+    };
+    subscribe();
+  }, [user]);
 
   return (
     <TableContainer component={Paper}>

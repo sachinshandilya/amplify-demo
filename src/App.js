@@ -5,15 +5,13 @@ import { AmplifySignOut } from "@aws-amplify/ui-react";
 import { Menu, MenuItem, IconButton } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PersonTable from "./PersonTable.js";
-// import AddPerson from "./AddPerson.js";
+import AddPerson from "./AddPerson.js";
 
 const App = ({ match }) => {
   const [authState, setAuthState] = React.useState();
   const [user, setUser] = React.useState();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
-
-  console.log("app");
 
   React.useEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
@@ -52,15 +50,12 @@ const App = ({ match }) => {
     </Menu>
   );
 
-  console.log("authState", authState);
-  console.log("user", user);
-
   return (
     <div style={{ display: "flex" }}>
       {authState === AuthState.SignedIn && user ? (
         <div>
           <PersonTable user={user} />
-          {/* <AddPerson /> */}
+          <AddPerson user={user} />
           <IconButton
             edge="end"
             aria-label="account of current user"
