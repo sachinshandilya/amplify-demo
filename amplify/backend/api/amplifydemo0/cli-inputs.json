@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "amplifydemo0",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/sachinsh/Desktop/workplace-js/amplify-demo-0/amplify/backend/api/amplifydemo0/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authamplifydemo0d5f3901e"
+      },
+      {
+        "mode": "AWS_IAM"
+      }
+    ]
+  }
+}

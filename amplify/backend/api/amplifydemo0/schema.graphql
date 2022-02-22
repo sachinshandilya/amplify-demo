@@ -1,0 +1,47 @@
+type Employee
+  @model
+  @versioned
+  @key(fields: ["id"])
+  @auth(
+    rules: [
+      {
+        allow: owner
+        ownerField: "organisation_id"
+        identityClaim: "custom:organisation_id"
+      }
+      { allow: public, operations: [read] }
+      {
+        allow: owner
+        ownerField: "organisation_id"
+        identityClaim: "custom:organisation_id"
+      }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  email: String!
+  age: String
+  salary: Int
+  organisation_id: ID!
+  organisation: Organisation @connection(fields: ["organisation_id"])
+}
+
+type Organisation
+  @model
+  @versioned
+  @key(fields: ["id"])
+  @auth(
+    rules: [
+      {
+        allow: owner
+        ownerField: "id"
+        identityClaim: "custom:organisation_id"
+      }
+      { allow: public, operations: [read] }
+      { allow: private, provider: iam }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  address: String
+}
