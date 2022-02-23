@@ -72,7 +72,7 @@ export default function AmplifyLogin() {
         <AmplifySignIn
           formFields={signInFields}
           slot="sign-in"
-          headerText="Log into PMO"
+          headerText="Log in"
           usernameAlias="email"
         />
       </AmplifyAuthenticator>
