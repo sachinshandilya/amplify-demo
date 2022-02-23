@@ -54,6 +54,12 @@ const App = ({ match }) => {
     <div style={{ display: "flex" }}>
       {authState === AuthState.SignedIn && user ? (
         <div>
+          <div style={{ fontSize: 22 }}>
+            Organisation :
+            <span style={{ fontWeight: 600, background: "white" }}>
+              {user?.attributes?.["custom:organisation_id"]}
+            </span>
+          </div>
           <PersonTable user={user} />
           <AddPerson user={user} />
           <IconButton
